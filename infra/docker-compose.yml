@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: live_location_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: live_location
+      POSTGRES_USER: live_location
+      POSTGRES_PASSWORD: live_location
+    ports:
+      - "5432:5432"
+    volumes:
+      - live_location_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U live_location -d live_location"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  live_location_db_data:
