@@ -1,0 +1,18 @@
+.app-layout {
+  display: flex;
+  flex-direction: column; /* always stack: sidebar on top, map below */
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 100%;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.map-wrapper {
+  width: 100%;
+  flex: 1;
+  height: 60vh; /* map gets a good portion of the screen */
+}
