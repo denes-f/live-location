@@ -40,3 +40,7 @@ def create_locations(
     for obj in created:
         db.refresh(obj)
     return created
+
+@router.get("/locations", response_model=List[Location])
+def list_locations(db: Session = Depends(get_db)):
+    return db.query(LocationModel).order_by(LocationModel.timestamp).all()

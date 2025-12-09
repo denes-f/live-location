@@ -5,6 +5,8 @@ click==8.3.1
 fastapi==0.123.9
 h11==0.16.0
 idna==3.11
+Jinja2==3.1.6
+MarkupSafe==3.0.3
 psycopg2-binary==2.9.11
 pydantic==2.12.5
 pydantic-settings==2.12.0

@@ -4,6 +4,13 @@ from app.api.v1.routes_locations import router as locations_router
 from app.core.config import settings
 from app.db.base import Base
 from app.db.session import engine
+from fastapi import FastAPI, Depends, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+
+from app.db.session import SessionLocal
+from app.models.location import Location
 
 def create_app() -> FastAPI:
     app = FastAPI(
@@ -15,6 +22,24 @@ def create_app() -> FastAPI:
         locations_router,
         prefix=settings.API_V1_PREFIX,
     )
+
+    app.mount("/", StaticFiles(directory="app/static", html=True), name="static")
+
+    def get_db():
+        db = SessionLocal()
+        try:
+            yield db
+        finally:
+            db.close()
+    templates = Jinja2Templates(directory="app/templates")
+
+    @app.get("/locations-view")
+    def show_locations(request: Request, db: Session = Depends(get_db)):
+        items = db.query(Location).order_by(Location.timestamp.desc()).all()
+        return templates.TemplateResponse(
+            "locations.html",
+            {"request": request, "locations": items}
+        )
 
     return app
 
