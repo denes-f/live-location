@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: live_location
       POSTGRES_PASSWORD: live_location
     ports:
-      - "5432:5432"
+      - "5435:5432"
     volumes:
       - live_location_db_data:/var/lib/postgresql/data
     healthcheck:
@@ -16,6 +16,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8005:8000"
+    depends_on:
+      - db
+    environment:
+      - PLACEHOLDER=0
+    restart: unless-stopped
 
 volumes:
   live_location_db_data:
