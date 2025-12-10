@@ -148,7 +148,7 @@ class LocationForegroundService : Service() {
         }
 
         val request = LocationRequest.Builder(
-            Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+            Priority.PRIORITY_HIGH_ACCURACY,
             60_000L // 60 seconds nominal interval
         )
             .setMinUpdateIntervalMillis(10_000L) // fastest ~10 seconds when moving
