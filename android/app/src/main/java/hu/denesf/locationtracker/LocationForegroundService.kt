@@ -175,7 +175,7 @@ class LocationForegroundService : Service() {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 "Live Location Tracking",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = "Shows a notification while your location is being tracked."
             }
@@ -209,6 +209,7 @@ class LocationForegroundService : Service() {
             .setContentIntent(pendingIntent)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
     }
 }

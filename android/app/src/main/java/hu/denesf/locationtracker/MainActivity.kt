@@ -1,7 +1,9 @@
 package hu.denesf.locationtracker
 
 import android.os.Bundle
+import android.os.Build
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,6 +22,9 @@ import hu.denesf.locationtracker.ui.theme.LocationTrackerTheme
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* isGranted -> we don't need to do anything specific here for now */ }
 
     private val locationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -34,6 +39,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (!hasNotificationPermission()) {
+                notificationPermissionLauncher.launch(POST_NOTIFICATIONS)
+            }
+        }
 
         setContent {
             LocationTrackerTheme {
@@ -59,6 +70,17 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
+        }
+    }
+
+    private fun hasNotificationPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                this,
+                POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
         }
     }
 
